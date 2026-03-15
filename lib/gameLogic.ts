@@ -17,6 +17,11 @@ export type ActivityEvent = {
   timestamp: string;
 };
 
+export interface Coordinates {
+  lat: number;
+  lng: number;
+}
+
 export const BUMP_RADIUS_METERS = 150;
 export const SCHOOL_QUIET_ZONE_RADIUS_METERS = 120;
 
