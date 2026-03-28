@@ -1,7 +1,4 @@
-export type Coordinates = {
-  latitude: number;
-  longitude: number;
-};
+import { Coordinates } from "@/lib/types";
 
 const EARTH_RADIUS_METERS = 6_371_000;
 
@@ -11,11 +8,11 @@ export const haversineDistanceMeters = (
   start: Coordinates,
   end: Coordinates,
 ): number => {
-  const latDiff = toRadians(end.latitude - start.latitude);
-  const lonDiff = toRadians(end.longitude - start.longitude);
+  const latDiff = toRadians(end.lat - start.lat);
+  const lonDiff = toRadians(end.lng - start.lng);
 
-  const startLatRadians = toRadians(start.latitude);
-  const endLatRadians = toRadians(end.latitude);
+  const startLatRadians = toRadians(start.lat);
+  const endLatRadians = toRadians(end.lat);
 
   const a =
     Math.sin(latDiff / 2) * Math.sin(latDiff / 2) +

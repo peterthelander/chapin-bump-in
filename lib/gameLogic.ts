@@ -1,4 +1,5 @@
-import { Coordinates, haversineDistanceMeters } from "@/lib/distance";
+import { haversineDistanceMeters } from "@/lib/distance";
+import { Coordinates } from "@/lib/types";
 
 export type Player = {
   id: string;
@@ -17,17 +18,12 @@ export type ActivityEvent = {
   timestamp: string;
 };
 
-export interface Coordinates {
-  lat: number;
-  lng: number;
-}
-
 export const BUMP_RADIUS_METERS = 150;
 export const SCHOOL_QUIET_ZONE_RADIUS_METERS = 120;
 
 export const schoolLocation: Coordinates = {
-  latitude: 40.7747,
-  longitude: -73.9578,
+  lat: 40.7747,
+  lng: -73.9578,
 };
 
 export const mockPlayers: Player[] = [
@@ -39,7 +35,7 @@ export const mockPlayers: Player[] = [
     uniquePeopleBumped: 12,
     achievements: ["First Bump", "Social Butterfly", "Explorer"],
     dailyPoints: 140,
-    location: { latitude: 40.776, longitude: -73.9582 },
+    location: { lat: 40.776, lng: -73.9582 },
   },
   {
     id: "sam",
@@ -49,7 +45,7 @@ export const mockPlayers: Player[] = [
     uniquePeopleBumped: 9,
     achievements: ["First Bump", "Explorer"],
     dailyPoints: 120,
-    location: { latitude: 40.7765, longitude: -73.959 },
+    location: { lat: 40.7765, lng: -73.959 },
   },
   {
     id: "jordan",
@@ -59,7 +55,7 @@ export const mockPlayers: Player[] = [
     uniquePeopleBumped: 10,
     achievements: ["First Bump", "Social Butterfly"],
     dailyPoints: 110,
-    location: { latitude: 40.7755, longitude: -73.956 },
+    location: { lat: 40.7755, lng: -73.956 },
   },
   {
     id: "mia",
@@ -69,7 +65,7 @@ export const mockPlayers: Player[] = [
     uniquePeopleBumped: 8,
     achievements: ["First Bump", "Legend"],
     dailyPoints: 95,
-    location: { latitude: 40.7771, longitude: -73.9558 },
+    location: { lat: 40.7771, lng: -73.9558 },
   },
 ];
 

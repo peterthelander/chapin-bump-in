@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo } from "react";
-import { BUMP_RADIUS_METERS, Coordinates, Player, findNearestPlayer, isInSchoolQuietZone } from "@/lib/gameLogic";
+import { BUMP_RADIUS_METERS, Player, findNearestPlayer, isInSchoolQuietZone } from "@/lib/gameLogic";
+import type { Coordinates } from "@/lib/types";
 
 type RadarProps = {
   currentLocation: Coordinates | null;

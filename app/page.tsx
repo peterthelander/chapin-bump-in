@@ -5,10 +5,10 @@ import { ActivityFeed } from "@/components/ActivityFeed";
 import { BumpAlert } from "@/components/BumpAlert";
 import { PlayerStats } from "@/components/PlayerStats";
 import { Radar } from "@/components/Radar";
+import type { Coordinates } from "@/lib/types";
 import {
   ActivityEvent,
   BUMP_RADIUS_METERS,
-  Coordinates,
   Player,
   arePlayersInBumpRange,
   findNearestPlayer,
@@ -52,8 +52,8 @@ export default function HomePage() {
     const watcher = navigator.geolocation.watchPosition(
       (position) => {
         setCurrentLocation({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
         });
         setLocationError("");
       },
