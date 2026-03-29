@@ -5,6 +5,7 @@ import { ActivityFeed } from "@/components/ActivityFeed";
 import { BumpAlert } from "@/components/BumpAlert";
 import { PlayerStats } from "@/components/PlayerStats";
 import { Radar } from "@/components/Radar";
+import { Card } from "@/components/ui/Card";
 import type { Coordinates } from "@/lib/types";
 import {
   ActivityEvent,
@@ -111,10 +112,10 @@ export default function HomePage() {
   return (
     <div className="stack">
       {locationError ? (
-        <section className="card">
+        <Card>
           <h2>Location issue</h2>
           <p className="muted">{locationError}</p>
-        </section>
+        </Card>
       ) : null}
 
       {showBumpAlert && nearest ? (
