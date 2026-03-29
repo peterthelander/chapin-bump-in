@@ -3,8 +3,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { ActivityFeed } from "@/components/ActivityFeed";
 import { BumpAlert } from "@/components/BumpAlert";
+import { CreateProfile } from "@/components/CreateProfile";
 import { PlayerStats } from "@/components/PlayerStats";
 import { Radar } from "@/components/Radar";
+import { useUser } from "@/components/UserProvider";
 import { Card } from "@/components/ui/Card";
 import type { Coordinates } from "@/lib/types";
 import {
@@ -18,24 +20,57 @@ import {
   seedActivityFeed,
 } from "@/lib/gameLogic";
 
-const activePlayerId = "alex";
+const starterAchievements = ["First Bump"];
+
+const toActivePlayer = (id: string, name: string): Player => ({
+  id,
+  name,
+  points: 0,
+  totalBumps: 0,
+  uniquePeopleBumped: 0,
+  achievements: starterAchievements,
+  dailyPoints: 0,
+  location: { lat: 40.7758, lng: -73.9583 },
+});
 
 export default function HomePage() {
+  const { user, setUser, isUserLoading } = useUser();
   const [players, setPlayers] = useState<Player[]>(mockPlayers);
   const [activityFeed, setActivityFeed] = useState<ActivityEvent[]>(seedActivityFeed);
   const [currentLocation, setCurrentLocation] = useState<Coordinates | null>(null);
   const [locationError, setLocationError] = useState<string>("");
   const [bumpConfirmed, setBumpConfirmed] = useState(false);
 
-  const activePlayer = useMemo(
-    () => players.find((player) => player.id === activePlayerId) ?? players[0],
-    [players],
-  );
+  const activePlayer = useMemo(() => {
+    if (!user) return null;
+
+    const existingPlayer = players.find((player) => player.id === user.id);
+    if (existingPlayer) {
+      return {
+        ...existingPlayer,
+        name: user.name,
+      };
+    }
+
+    return toActivePlayer(user.id, user.name);
+  }, [players, user]);
+
+  useEffect(() => {
+    if (!user) {
+      setPlayers(mockPlayers);
+      return;
+    }
+
+    setPlayers((existingPlayers) => {
+      const withoutUserPlayer = existingPlayers.filter((player) => player.id !== user.id);
+      return [toActivePlayer(user.id, user.name), ...withoutUserPlayer];
+    });
+  }, [user]);
 
   const nearest = useMemo(() => {
-    if (!currentLocation) return null;
+    if (!currentLocation || !activePlayer) return null;
     return findNearestPlayer(currentLocation, activePlayer.id, players);
-  }, [activePlayer.id, currentLocation, players]);
+  }, [activePlayer, currentLocation, players]);
 
   const showBumpAlert =
     Boolean(currentLocation) &&
@@ -45,6 +80,10 @@ export default function HomePage() {
     !bumpConfirmed;
 
   useEffect(() => {
+    if (!user) {
+      return;
+    }
+
     if (!navigator.geolocation) {
       setLocationError("Geolocation is not supported in this browser.");
       return;
@@ -65,10 +104,10 @@ export default function HomePage() {
     );
 
     return () => navigator.geolocation.clearWatch(watcher);
-  }, []);
+  }, [user]);
 
   const handleBump = () => {
-    if (!nearest || !currentLocation) return;
+    if (!nearest || !currentLocation || !activePlayer) return;
 
     if (!arePlayersInBumpRange(currentLocation, nearest.player.location)) {
       return;
@@ -79,6 +118,7 @@ export default function HomePage() {
         if (player.id === activePlayer.id) {
           return {
             ...player,
+            name: user?.name ?? player.name,
             points: player.points + 10,
             totalBumps: player.totalBumps + 1,
             uniquePeopleBumped: player.uniquePeopleBumped + 1,
@@ -108,6 +148,18 @@ export default function HomePage() {
 
     setBumpConfirmed(true);
   };
+
+  if (isUserLoading) {
+    return null;
+  }
+
+  if (!user) {
+    return <CreateProfile onCreate={setUser} />;
+  }
+
+  if (!activePlayer) {
+    return null;
+  }
 
   return (
     <div className="stack">

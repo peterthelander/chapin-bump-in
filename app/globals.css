@@ -401,3 +401,42 @@ h3 {
     font-size: 1.3rem;
   }
 }
+
+.create-profile-screen {
+  min-height: calc(100vh - 220px);
+  display: grid;
+  place-items: center;
+}
+
+.create-profile-card {
+  width: min(440px, 100%);
+  padding: 1.4rem;
+}
+
+.create-profile-form {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.profile-name-input {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 0.85rem 0.95rem;
+  font-size: 1.1rem;
+  background: #f7fff9;
+  color: var(--text);
+}
+
+.profile-name-input:focus {
+  outline: 2px solid #86efac;
+  border-color: #4ade80;
+}
+
+.profile-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}

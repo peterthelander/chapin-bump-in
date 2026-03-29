@@ -1,11 +1,64 @@
+"use client";
+
+import { FormEvent, useMemo, useState } from "react";
+import { useUser } from "@/components/UserProvider";
 import { Avatar } from "@/components/ui/Avatar";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { mockPlayers } from "@/lib/gameLogic";
+import { updateStoredUserName } from "@/lib/userStorage";
 
-const profilePlayer = mockPlayers[0];
+const profileTemplate = mockPlayers[0];
 
 export default function ProfilePage() {
+  const { user, setUser, isUserLoading } = useUser();
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [nameInput, setNameInput] = useState("");
+
+  const profilePlayer = useMemo(() => {
+    if (!user) return null;
+
+    return {
+      ...profileTemplate,
+      id: user.id,
+      name: user.name,
+    };
+  }, [user]);
+
+  const startEditing = () => {
+    if (!user) {
+      return;
+    }
+
+    setNameInput(user.name);
+    setIsEditingName(true);
+  };
+
+  const handleSave = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!user || !nameInput.trim()) {
+      return;
+    }
+
+    setUser(updateStoredUserName(user, nameInput));
+    setIsEditingName(false);
+  };
+
+  if (isUserLoading) {
+    return null;
+  }
+
+  if (!user || !profilePlayer) {
+    return (
+      <Card>
+        <h2>No profile found</h2>
+        <p className="muted">Go to Home to create your player profile.</p>
+      </Card>
+    );
+  }
+
   return (
     <div className="stack">
       <Card className="profile-header-card">
@@ -14,6 +67,29 @@ export default function ProfilePage() {
           <h2>{profilePlayer.name}</h2>
           <p className="muted">Chapin community player</p>
         </div>
+      </Card>
+
+      <Card>
+        <div className="profile-actions">
+          <h3>Profile</h3>
+          <Button variant="ghost" onClick={startEditing}>Edit Name</Button>
+        </div>
+
+        {isEditingName ? (
+          <form onSubmit={handleSave} className="create-profile-form">
+            <input
+              className="profile-name-input"
+              value={nameInput}
+              onChange={(event) => setNameInput(event.target.value)}
+              placeholder="Your name"
+              maxLength={40}
+              autoFocus
+            />
+            <Button className="large-button" type="submit" disabled={!nameInput.trim()}>
+              Save Name
+            </Button>
+          </form>
+        ) : null}
       </Card>
 
       <Card>

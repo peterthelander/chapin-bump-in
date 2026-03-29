@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { NavTabs } from "@/components/NavTabs";
+import { UserProvider } from "@/components/UserProvider";
 
 export const metadata: Metadata = {
   title: "Chapin Bump In",
@@ -15,14 +16,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <div className="app-shell">
-          <header className="top-nav">
-            <p className="eyebrow">Mobile Social Game</p>
-            <h1>Chapin Bump In</h1>
-            <NavTabs />
-          </header>
-          <main>{children}</main>
-        </div>
+        <UserProvider>
+          <div className="app-shell">
+            <header className="top-nav">
+              <p className="eyebrow">Mobile Social Game</p>
+              <h1>Chapin Bump In</h1>
+              <NavTabs />
+            </header>
+            <main>{children}</main>
+          </div>
+        </UserProvider>
       </body>
     </html>
   );
