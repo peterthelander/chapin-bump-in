@@ -3,6 +3,8 @@
 import { useMemo } from "react";
 import { BUMP_RADIUS_METERS, Player, findNearestPlayer, isInSchoolQuietZone } from "@/lib/gameLogic";
 import type { Coordinates } from "@/lib/types";
+import { Badge } from "@/components/ui/Badge";
+import { Card } from "@/components/ui/Card";
 
 type RadarProps = {
   currentLocation: Coordinates | null;
@@ -22,8 +24,8 @@ export function Radar({ currentLocation, currentPlayerId, players }: RadarProps)
 
     if (isInSchoolQuietZone(currentLocation)) {
       return {
-        title: "School Mode: Bumps are paused while on campus.",
-        detail: "You are inside the school quiet zone.",
+        title: "School Mode active",
+        detail: "Bumps are paused while inside the school quiet zone.",
         nearbyPlayerName: null as string | null,
       };
     }
@@ -39,20 +41,26 @@ export function Radar({ currentLocation, currentPlayerId, players }: RadarProps)
     }
 
     return {
-      title: "Someone nearby…",
+      title: "Someone nearby 👀",
       detail: `${nearest.player.name} is about ${Math.round(nearest.distance)} meters away.`,
       nearbyPlayerName: nearest.player.name,
     };
   }, [currentLocation, currentPlayerId, players]);
 
   return (
-    <section className="card">
+    <Card>
       <h2>Radar</h2>
-      <p>
-        <strong>{radarState.title}</strong>
-      </p>
+      <div className="radar-shell" aria-hidden="true">
+        <div className="radar-ring ring-1" />
+        <div className="radar-ring ring-2" />
+        <div className="radar-ring ring-3" />
+        <div className="radar-pulse" />
+        <div className={`radar-center-dot ${radarState.nearbyPlayerName ? "active" : ""}`.trim()} />
+        {radarState.nearbyPlayerName ? <div className="radar-target-dot" /> : null}
+      </div>
+      <p className="radar-title">{radarState.title}</p>
       <p className="muted">{radarState.detail}</p>
-      {radarState.nearbyPlayerName ? <span className="badge">Bump candidate detected</span> : null}
-    </section>
+      {radarState.nearbyPlayerName ? <Badge>Bump candidate detected</Badge> : null}
+    </Card>
   );
 }

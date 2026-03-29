@@ -1,5 +1,8 @@
 "use client";
 
+import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
+
 type BumpAlertProps = {
   nearbyPlayerName: string;
   onConfirm: () => void;
@@ -7,12 +10,14 @@ type BumpAlertProps = {
 
 export function BumpAlert({ nearbyPlayerName, onConfirm }: BumpAlertProps) {
   return (
-    <section className="card">
-      <h2>Chapin Bump Alert! Someone nearby.</h2>
-      <p className="muted">{nearbyPlayerName} is in range. Ready to bump?</p>
-      <button type="button" className="large-button" onClick={onConfirm}>
+    <Card className="bump-alert">
+      <h2>Chapin Bump Alert! 👋</h2>
+      <p className="muted">
+        <strong>{nearbyPlayerName}</strong> is in range. Ready to bump in for points?
+      </p>
+      <Button className="large-button" onClick={onConfirm}>
         BUMP IN NOW
-      </button>
-    </section>
+      </Button>
+    </Card>
   );
 }

@@ -1,17 +1,11 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import "./globals.css";
+import { NavTabs } from "@/components/NavTabs";
 
 export const metadata: Metadata = {
   title: "Chapin Bump In",
   description: "A location-based social game for the Chapin community.",
 };
-
-const navItems = [
-  { href: "/", label: "Home" },
-  { href: "/leaderboard", label: "Leaderboard" },
-  { href: "/profile", label: "Profile" },
-];
 
 export default function RootLayout({
   children,
@@ -23,14 +17,9 @@ export default function RootLayout({
       <body>
         <div className="app-shell">
           <header className="top-nav">
+            <p className="eyebrow">Mobile Social Game</p>
             <h1>Chapin Bump In</h1>
-            <nav>
-              {navItems.map((item) => (
-                <Link key={item.href} href={item.href} className="nav-link">
-                  {item.label}
-                </Link>
-              ))}
-            </nav>
+            <NavTabs />
           </header>
           <main>{children}</main>
         </div>

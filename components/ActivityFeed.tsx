@@ -1,4 +1,6 @@
 import { ActivityEvent } from "@/lib/gameLogic";
+import { Avatar } from "@/components/ui/Avatar";
+import { Card } from "@/components/ui/Card";
 
 type ActivityFeedProps = {
   events: ActivityEvent[];
@@ -6,16 +8,23 @@ type ActivityFeedProps = {
 
 export function ActivityFeed({ events }: ActivityFeedProps) {
   return (
-    <section className="card">
+    <Card>
       <h2>Activity Feed</h2>
-      <ul className="list">
-        {events.map((event) => (
-          <li key={event.id}>
-            <strong>{event.message}</strong>
-            <p className="muted">{event.timestamp}</p>
-          </li>
-        ))}
+      <ul className="activity-list">
+        {events.map((event) => {
+          const actorName = event.message.split(" ")[0] ?? "Player";
+
+          return (
+            <li key={event.id} className="activity-item">
+              <Avatar name={actorName} size="sm" />
+              <div>
+                <p className="activity-message">{event.message}</p>
+                <p className="muted activity-time">{event.timestamp}</p>
+              </div>
+            </li>
+          );
+        })}
       </ul>
-    </section>
+    </Card>
   );
 }
