@@ -16,8 +16,8 @@ export function Radar({ currentLocation, currentPlayerId, players }: RadarProps)
   const radarState = useMemo(() => {
     if (!currentLocation) {
       return {
-        title: "Enable location to start radar",
-        detail: "We use your browser geolocation to detect nearby players.",
+        title: "No players nearby",
+        detail: "Enable location to detect nearby players.",
         nearbyPlayerName: null as string | null,
       };
     }
@@ -48,17 +48,19 @@ export function Radar({ currentLocation, currentPlayerId, players }: RadarProps)
   }, [currentLocation, currentPlayerId, players]);
 
   return (
-    <Card>
+    <Card className="radar-card">
       <h2>Radar</h2>
       <div className="radar-shell" aria-hidden="true">
         <div className="radar-ring ring-1" />
         <div className="radar-ring ring-2" />
         <div className="radar-ring ring-3" />
         <div className="radar-pulse" />
+        <div className="radar-center-copy">
+          <p className="radar-title">{radarState.title}</p>
+        </div>
         <div className={`radar-center-dot ${radarState.nearbyPlayerName ? "active" : ""}`.trim()} />
         {radarState.nearbyPlayerName ? <div className="radar-target-dot" /> : null}
       </div>
-      <p className="radar-title">{radarState.title}</p>
       <p className="muted">{radarState.detail}</p>
       {radarState.nearbyPlayerName ? <Badge>Bump candidate detected</Badge> : null}
     </Card>

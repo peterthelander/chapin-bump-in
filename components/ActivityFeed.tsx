@@ -21,8 +21,11 @@ export function ActivityFeed({ events }: ActivityFeedProps) {
             return (
               <li key={event.id} className="activity-item">
                 <Avatar name={actorName} size="sm" />
-                <div>
-                  <p className="activity-message">{event.message}</p>
+                <div className="activity-copy">
+                  <p className="activity-message">
+                    <span className="activity-name">{actorName}</span>{" "}
+                    {event.message.slice(actorName.length).trim()}
+                  </p>
                   <p className="muted activity-time">{event.timestamp}</p>
                 </div>
               </li>

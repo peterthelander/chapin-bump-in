@@ -25,16 +25,26 @@ body {
 .app-shell {
   width: min(560px, 100%);
   margin: 0 auto;
-  padding: 0 1rem 1.5rem;
+  padding: 0 1rem 2rem;
+  position: relative;
+}
+
+.app-shell::after {
+  content: "";
+  position: fixed;
+  inset: auto 0 0;
+  height: 36vh;
+  background: linear-gradient(180deg, rgba(34, 197, 94, 0), rgba(34, 197, 94, 0.08));
+  pointer-events: none;
+  z-index: 0;
 }
 
 .top-nav {
-  position: sticky;
-  top: 0;
-  z-index: 2;
+  position: relative;
+  z-index: 1;
   margin: 0 -1rem 1rem;
-  padding: 1rem 1rem 1.25rem;
-  border-radius: 0 0 24px 24px;
+  padding: 2rem 1.15rem;
+  border-radius: 0 0 1.6rem 1.6rem;
   background: linear-gradient(120deg, var(--accent-strong), var(--accent));
   box-shadow: 0 10px 30px rgba(18, 56, 32, 0.22);
   color: #fff;
@@ -49,8 +59,8 @@ body {
 }
 
 .top-nav h1 {
-  margin: 0.35rem 0 1rem;
-  font-size: 1.45rem;
+  margin: 0.45rem 0 1.1rem;
+  font-size: clamp(1.75rem, 6vw, 2rem);
 }
 
 .nav-tabs {
@@ -69,7 +79,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 999px;
   padding: 0.55rem 0.5rem;
-  transition: transform 180ms ease, background 180ms ease;
+  transition: transform 200ms ease, background 200ms ease, color 200ms ease;
 }
 
 .nav-pill:hover {
@@ -78,7 +88,7 @@ body {
 }
 
 .nav-pill:active {
-  transform: scale(0.98);
+  transform: scale(0.95);
 }
 
 .nav-pill.active {
@@ -87,22 +97,27 @@ body {
   border-color: #ffffff;
 }
 
+.main-content {
+  position: relative;
+  z-index: 1;
+}
+
 .stack {
   display: grid;
-  gap: 0.95rem;
+  gap: 1.5rem;
 }
 
 .card {
-  background: var(--card);
+  background: #ffffff;
   border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 1rem;
-  box-shadow: 0 10px 30px rgba(25, 65, 41, 0.08);
-  transition: transform 200ms ease, box-shadow 200ms ease;
+  border-radius: 1rem;
+  padding: 1.25rem;
+  box-shadow: 0 8px 20px rgba(25, 65, 41, 0.09);
+  transition: transform 200ms ease, box-shadow 200ms ease, background 200ms ease;
 }
 
 .card:hover {
-  transform: translateY(-2px) scale(1.01);
+  transform: translateY(-2px);
   box-shadow: 0 14px 35px rgba(25, 65, 41, 0.11);
 }
 
@@ -134,7 +149,7 @@ h3 {
 }
 
 .button:active {
-  transform: scale(0.98);
+  transform: scale(0.95);
 }
 
 .button-primary {
@@ -176,10 +191,10 @@ h3 {
 }
 
 .stat-item {
-  border-radius: 16px;
-  background: #f7fff9;
+  border-radius: 0.85rem;
+  background: #f0fdf4;
   border: 1px solid var(--border);
-  padding: 0.7rem;
+  padding: 0.8rem;
 }
 
 .stat-label {
@@ -198,19 +213,19 @@ h3 {
 }
 
 .radar-shell {
-  width: min(260px, 75vw);
+  width: min(256px, 75vw);
   aspect-ratio: 1;
   margin: 0 auto 0.9rem;
   border-radius: 999px;
   position: relative;
-  background: radial-gradient(circle, #edfff3 0%, #d5f6e1 70%, #c4eed3 100%);
+  background: radial-gradient(circle, #f4fff8 0%, #ddfbe8 68%, #cef3dd 100%);
   overflow: hidden;
 }
 
 .radar-ring {
   position: absolute;
   inset: 50%;
-  border: 2px solid rgba(34, 197, 94, 0.35);
+  border: 2px solid rgba(34, 197, 94, 0.28);
   border-radius: 999px;
   transform: translate(-50%, -50%);
 }
@@ -222,8 +237,8 @@ h3 {
 .radar-pulse {
   position: absolute;
   inset: 50%;
-  width: 26%;
-  height: 26%;
+  width: 25%;
+  height: 25%;
   border-radius: 999px;
   background: rgba(34, 197, 94, 0.28);
   transform: translate(-50%, -50%);
@@ -242,7 +257,8 @@ h3 {
   width: 12px;
   height: 12px;
   transform: translate(-50%, -50%);
-  background: #7e9486;
+  background: #99a8a0;
+  z-index: 2;
 }
 
 .radar-center-dot.active {
@@ -252,17 +268,32 @@ h3 {
 .radar-target-dot {
   top: 33%;
   right: 27%;
-  width: 10px;
-  height: 10px;
+  width: 11px;
+  height: 11px;
   background: #15a34a;
-  box-shadow: 0 0 0 0 rgba(21, 163, 74, 0.5);
+  box-shadow: 0 0 10px rgba(21, 163, 74, 0.6);
   animation: ping 1.6s ease-out infinite;
 }
 
+.radar-center-copy {
+  position: absolute;
+  inset: 50%;
+  transform: translate(-50%, -50%);
+  width: 65%;
+  text-align: center;
+  z-index: 1;
+}
+
 .radar-title {
-  margin-bottom: 0.3rem;
+  margin: 0;
   font-weight: 800;
-  font-size: 1.05rem;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.radar-card {
+  text-align: center;
+  background: linear-gradient(180deg, #ffffff, #f7fff9);
 }
 
 .activity-list,
@@ -275,7 +306,7 @@ h3 {
 
 .activity-list {
   display: grid;
-  gap: 0.55rem;
+  gap: 0.75rem;
 }
 
 .activity-item {
@@ -285,17 +316,26 @@ h3 {
   background: #f9fffb;
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 0.6rem 0.7rem;
+  padding: 0.75rem 0.8rem;
+}
+
+.activity-copy {
+  display: grid;
+  gap: 0.15rem;
 }
 
 .activity-message {
   margin: 0;
-  font-weight: 700;
+  font-weight: 500;
   font-size: 0.95rem;
 }
 
+.activity-name {
+  font-weight: 800;
+}
+
 .activity-time {
-  margin-top: 0.15rem;
+  margin-top: 0;
   font-size: 0.78rem;
 }
 
@@ -369,6 +409,23 @@ h3 {
   display: flex;
   align-items: center;
   gap: 0.9rem;
+  background: linear-gradient(180deg, #ffffff, #f4fff7);
+}
+
+.profile-hero-avatar {
+  width: 74px;
+  height: 74px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(140deg, #16a34a, #22c55e);
+}
+
+.profile-hero-avatar .avatar {
+  background: transparent;
+  width: 64px;
+  height: 64px;
+  font-size: 1.5rem;
 }
 
 .achievement-list {

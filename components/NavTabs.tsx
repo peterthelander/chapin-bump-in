@@ -18,7 +18,12 @@ export function NavTabs() {
         const isActive = pathname === item.href;
 
         return (
-          <Link key={item.href} href={item.href} className={`nav-pill ${isActive ? "active" : ""}`.trim()}>
+          <Link
+            key={item.href}
+            href={item.href}
+            className={`nav-pill ${isActive ? "active" : ""}`.trim()}
+            aria-current={isActive ? "page" : undefined}
+          >
             {item.label}
           </Link>
         );
