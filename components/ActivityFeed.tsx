@@ -7,24 +7,29 @@ type ActivityFeedProps = {
 };
 
 export function ActivityFeed({ events }: ActivityFeedProps) {
+  const hasEvents = events.length > 0;
+
   return (
     <Card>
       <h2>Activity Feed</h2>
-      <ul className="activity-list">
-        {events.map((event) => {
-          const actorName = event.message.split(" ")[0] ?? "Player";
+      {!hasEvents ? <p className="muted">No activity yet — go find someone to bump!</p> : null}
+      {hasEvents ? (
+        <ul className="activity-list">
+          {events.map((event) => {
+            const actorName = event.message.split(" ")[0] ?? "Player";
 
-          return (
-            <li key={event.id} className="activity-item">
-              <Avatar name={actorName} size="sm" />
-              <div>
-                <p className="activity-message">{event.message}</p>
-                <p className="muted activity-time">{event.timestamp}</p>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
+            return (
+              <li key={event.id} className="activity-item">
+                <Avatar name={actorName} size="sm" />
+                <div>
+                  <p className="activity-message">{event.message}</p>
+                  <p className="muted activity-time">{event.timestamp}</p>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      ) : null}
     </Card>
   );
 }
