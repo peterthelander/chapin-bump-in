@@ -23,7 +23,7 @@ export default function RootLayout({
               <h1>Chapin Bump In</h1>
               <NavTabs />
             </header>
-            <main>{children}</main>
+            <main className="main-content">{children}</main>
           </div>
         </UserProvider>
       </body>

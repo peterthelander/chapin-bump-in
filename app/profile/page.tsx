@@ -51,7 +51,9 @@ export default function ProfilePage() {
   return (
     <div className="stack">
       <Card className="profile-header-card">
-        <Avatar name={user.name} size="lg" />
+        <div className="profile-hero-avatar">
+          <Avatar name={user.name} size="lg" />
+        </div>
         <div>
           <h2>{user.name}</h2>
           <p className="muted">Chapin community player</p>
