@@ -16,54 +16,41 @@ import {
   arePlayersInBumpRange,
   findNearestPlayer,
   isInSchoolQuietZone,
-  mockPlayers,
-  seedActivityFeed,
 } from "@/lib/gameLogic";
 
-const starterAchievements = ["First Bump"];
-
-const toActivePlayer = (id: string, name: string): Player => ({
-  id,
-  name,
-  points: 0,
-  totalBumps: 0,
-  uniquePeopleBumped: 0,
-  achievements: starterAchievements,
-  dailyPoints: 0,
+const toActivePlayer = (user: { id: string; name: string; points: number; totalBumps: number; uniquePeople: number; achievements: string[] }): Player => ({
+  id: user.id,
+  name: user.name,
+  points: user.points,
+  totalBumps: user.totalBumps,
+  uniquePeople: user.uniquePeople,
+  achievements: user.achievements,
+  dailyPoints: user.points,
   location: { lat: 40.7758, lng: -73.9583 },
 });
 
 export default function HomePage() {
   const { user, setUser, isUserLoading } = useUser();
-  const [players, setPlayers] = useState<Player[]>(mockPlayers);
-  const [activityFeed, setActivityFeed] = useState<ActivityEvent[]>(seedActivityFeed);
+  const [players, setPlayers] = useState<Player[]>([]);
+  const [activityFeed, setActivityFeed] = useState<ActivityEvent[]>([]);
   const [currentLocation, setCurrentLocation] = useState<Coordinates | null>(null);
   const [locationError, setLocationError] = useState<string>("");
   const [bumpConfirmed, setBumpConfirmed] = useState(false);
 
   const activePlayer = useMemo(() => {
     if (!user) return null;
-
-    const existingPlayer = players.find((player) => player.id === user.id);
-    if (existingPlayer) {
-      return {
-        ...existingPlayer,
-        name: user.name,
-      };
-    }
-
-    return toActivePlayer(user.id, user.name);
-  }, [players, user]);
+    return toActivePlayer(user);
+  }, [user]);
 
   useEffect(() => {
     if (!user) {
-      setPlayers(mockPlayers);
+      setPlayers([]);
       return;
     }
 
     setPlayers((existingPlayers) => {
       const withoutUserPlayer = existingPlayers.filter((player) => player.id !== user.id);
-      return [toActivePlayer(user.id, user.name), ...withoutUserPlayer];
+      return [toActivePlayer(user), ...withoutUserPlayer];
     });
   }, [user]);
 
@@ -107,22 +94,30 @@ export default function HomePage() {
   }, [user]);
 
   const handleBump = () => {
-    if (!nearest || !currentLocation || !activePlayer) return;
+    if (!nearest || !currentLocation || !activePlayer || !user) return;
 
     if (!arePlayersInBumpRange(currentLocation, nearest.player.location)) {
       return;
     }
+
+    const updatedUser = {
+      ...user,
+      points: user.points + 10,
+      totalBumps: user.totalBumps + 1,
+      uniquePeople: user.uniquePeople + 1,
+    };
+    setUser(updatedUser);
 
     setPlayers((existingPlayers) =>
       existingPlayers.map((player) => {
         if (player.id === activePlayer.id) {
           return {
             ...player,
-            name: user?.name ?? player.name,
-            points: player.points + 10,
-            totalBumps: player.totalBumps + 1,
-            uniquePeopleBumped: player.uniquePeopleBumped + 1,
-            dailyPoints: player.dailyPoints + 10,
+            name: updatedUser.name,
+            points: updatedUser.points,
+            totalBumps: updatedUser.totalBumps,
+            uniquePeople: updatedUser.uniquePeople,
+            dailyPoints: updatedUser.points,
           };
         }
         if (player.id === nearest.player.id) {

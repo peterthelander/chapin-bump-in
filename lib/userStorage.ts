@@ -18,7 +18,11 @@ export const getStoredUser = (): User | null => {
     if (
       typeof parsedUser.id !== "string" ||
       typeof parsedUser.name !== "string" ||
-      typeof parsedUser.createdAt !== "number"
+      typeof parsedUser.createdAt !== "number" ||
+      typeof parsedUser.points !== "number" ||
+      typeof parsedUser.totalBumps !== "number" ||
+      typeof parsedUser.uniquePeople !== "number" ||
+      !Array.isArray(parsedUser.achievements)
     ) {
       return null;
     }
@@ -27,6 +31,12 @@ export const getStoredUser = (): User | null => {
       id: parsedUser.id,
       name: parsedUser.name,
       createdAt: parsedUser.createdAt,
+      points: parsedUser.points,
+      totalBumps: parsedUser.totalBumps,
+      uniquePeople: parsedUser.uniquePeople,
+      achievements: parsedUser.achievements.filter(
+        (achievement): achievement is string => typeof achievement === "string",
+      ),
     };
   } catch {
     return null;
@@ -45,6 +55,10 @@ export const createUserProfile = (name: string): User => ({
   id: String(Date.now()),
   name: name.trim(),
   createdAt: Date.now(),
+  points: 0,
+  totalBumps: 0,
+  uniquePeople: 0,
+  achievements: [],
 });
 
 export const updateStoredUserName = (user: User, name: string): User => {

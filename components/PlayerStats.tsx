@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/Card";
 const statsConfig = [
   { key: "points", label: "Points", icon: "⭐" },
   { key: "totalBumps", label: "Total Bumps", icon: "🤝" },
-  { key: "uniquePeopleBumped", label: "People Met", icon: "👥" },
+  { key: "uniquePeople", label: "People Met", icon: "👥" },
 ] as const;
 
 type PlayerStatsProps = {
