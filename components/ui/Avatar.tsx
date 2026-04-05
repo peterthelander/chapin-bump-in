@@ -1,19 +1,16 @@
 type AvatarProps = {
   name: string;
+  seed: string;
   size?: "sm" | "md" | "lg";
 };
 
-export function Avatar({ name, size = "md" }: AvatarProps) {
-  const initials = name
-    .split(" ")
-    .map((part) => part[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
+const getAvatarUrl = (seed: string): string =>
+  `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(seed)}`;
 
+export function Avatar({ name, seed, size = "md" }: AvatarProps) {
   return (
     <div className={`avatar avatar-${size}`.trim()} aria-label={`${name} avatar`}>
-      {initials}
+      <img src={getAvatarUrl(seed)} alt={`${name} avatar`} className="avatar-image" />
     </div>
   );
 }

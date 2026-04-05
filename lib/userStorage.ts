@@ -2,6 +2,9 @@ import type { User } from "@/lib/types";
 
 export const USER_STORAGE_KEY = "chapin_user";
 
+const generateAvatarSeed = (): string =>
+  Math.random().toString(36).slice(2, 10);
+
 export const getStoredUser = (): User | null => {
   if (typeof window === "undefined") {
     return null;
@@ -18,6 +21,7 @@ export const getStoredUser = (): User | null => {
     if (
       typeof parsedUser.id !== "string" ||
       typeof parsedUser.name !== "string" ||
+      typeof parsedUser.avatarSeed !== "string" ||
       typeof parsedUser.createdAt !== "number" ||
       typeof parsedUser.points !== "number" ||
       typeof parsedUser.totalBumps !== "number" ||
@@ -30,6 +34,7 @@ export const getStoredUser = (): User | null => {
     return {
       id: parsedUser.id,
       name: parsedUser.name,
+      avatarSeed: parsedUser.avatarSeed,
       createdAt: parsedUser.createdAt,
       points: parsedUser.points,
       totalBumps: parsedUser.totalBumps,
@@ -51,9 +56,10 @@ export const saveStoredUser = (user: User): void => {
   window.localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
 };
 
-export const createUserProfile = (name: string): User => ({
+export const createUserProfile = (name: string, avatarSeed: string): User => ({
   id: String(Date.now()),
   name: name.trim(),
+  avatarSeed: avatarSeed.trim() || generateAvatarSeed(),
   createdAt: Date.now(),
   points: 0,
   totalBumps: 0,
@@ -65,6 +71,16 @@ export const updateStoredUserName = (user: User, name: string): User => {
   const updatedUser = {
     ...user,
     name: name.trim(),
+  };
+
+  saveStoredUser(updatedUser);
+  return updatedUser;
+};
+
+export const updateStoredUserAvatar = (user: User, seed: string): User => {
+  const updatedUser = {
+    ...user,
+    avatarSeed: seed.trim() || generateAvatarSeed(),
   };
 
   saveStoredUser(updatedUser);

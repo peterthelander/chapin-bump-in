@@ -10,6 +10,14 @@ type CreateProfileProps = {
   onCreate: (user: User) => void;
 };
 
+const buildSeed = (): string => {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return crypto.randomUUID();
+  }
+
+  return Math.random().toString(36).slice(2, 10);
+};
+
 export function CreateProfile({ onCreate }: CreateProfileProps) {
   const [name, setName] = useState("");
 
@@ -21,7 +29,7 @@ export function CreateProfile({ onCreate }: CreateProfileProps) {
       return;
     }
 
-    onCreate(createUserProfile(trimmedName));
+    onCreate(createUserProfile(trimmedName, buildSeed()));
   };
 
   return (
