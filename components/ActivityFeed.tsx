@@ -20,7 +20,7 @@ export function ActivityFeed({ events }: ActivityFeedProps) {
 
             return (
               <li key={event.id} className="activity-item">
-                <Avatar name={actorName} size="sm" />
+                <Avatar name={actorName} seed={actorName} size="sm" />
                 <div className="activity-copy">
                   <p className="activity-message">
                     <span className="activity-name">{actorName}</span>{" "}

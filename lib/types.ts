@@ -6,6 +6,7 @@ export interface Coordinates {
 export interface User {
   id: string;
   name: string;
+  avatarSeed: string;
   createdAt: number;
   points: number;
   totalBumps: number;

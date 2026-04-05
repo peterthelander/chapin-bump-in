@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { AvatarPicker } from "@/components/AvatarPicker";
 import { useUser } from "@/components/UserProvider";
 import { Avatar } from "@/components/ui/Avatar";
 import { Badge } from "@/components/ui/Badge";
@@ -11,6 +12,7 @@ import { updateStoredUserName } from "@/lib/userStorage";
 export default function ProfilePage() {
   const { user, setUser, isUserLoading } = useUser();
   const [isEditingName, setIsEditingName] = useState(false);
+  const [isPickingAvatar, setIsPickingAvatar] = useState(false);
   const [nameInput, setNameInput] = useState("");
 
   const startEditing = () => {
@@ -52,7 +54,7 @@ export default function ProfilePage() {
     <div className="stack">
       <Card className="profile-header-card">
         <div className="profile-hero-avatar">
-          <Avatar name={user.name} size="lg" />
+          <Avatar name={user.name} seed={user.avatarSeed} size="lg" />
         </div>
         <div>
           <h2>{user.name}</h2>
@@ -63,7 +65,12 @@ export default function ProfilePage() {
       <Card>
         <div className="profile-actions">
           <h3>Profile</h3>
-          <Button variant="ghost" onClick={startEditing}>Edit Name</Button>
+          <div className="profile-action-buttons">
+            <Button variant="ghost" onClick={startEditing}>Edit Name</Button>
+            <Button variant="ghost" onClick={() => setIsPickingAvatar((open) => !open)}>
+              {isPickingAvatar ? "Cancel Avatar" : "Edit Avatar"}
+            </Button>
+          </div>
         </div>
 
         {isEditingName ? (
@@ -80,6 +87,16 @@ export default function ProfilePage() {
               Save Name
             </Button>
           </form>
+        ) : null}
+
+        {isPickingAvatar ? (
+          <div className="avatar-picker-wrap">
+            <AvatarPicker
+              user={user}
+              onUserUpdate={setUser}
+              onComplete={() => setIsPickingAvatar(false)}
+            />
+          </div>
         ) : null}
       </Card>
 
